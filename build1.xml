@@ -1,0 +1,148 @@
+<project name="monitor" default="all" basedir=".">
+
+	<!-- set global properties & libs -->
+	<!--<property name="dbaddr" value="172.16.0.15:3306" />-->
+	<property name="encoding" value="UTF-8" />
+	<property name="release.root" value="/usr/local/qixiong_h5/webroot/dynasty" />
+	<property name="flash_data_path" value="flex_src/swf/config/data.zip"/>
+	
+	<property name="mysql.dbServer" value="192.168.3.89/forest_blog" />
+	<property name="mysql.user" value="devuser" />
+	<property name="mysql.passwd" value="devuser" />
+	
+	<property environment="env">
+	</property>
+	
+	<property name="dbunit.operation.type" value="CLEAN_INSERT"/>
+
+	<path id="dbunit.classpath">
+		<pathelement location="version/dbunit-2.1.jar" />
+		<pathelement location="lib/mysql-connector-java-5.1.6-bin.jar" />
+		<pathelement location="lib/log4j-1.2.14.jar" />
+	</path>
+
+	<!-- All: Do all the things here -->
+	<target name="all">
+		<!--antcall target="clean"/-->
+		<antcall target="compile"/>
+		<antcall target="deploy"/>
+	</target>
+
+	<target name="clean">
+		<delete dir="webroot/WEB-INF/classes"/>
+		<mkdir dir="webroot/WEB-INF/classes"/>
+		<delete dir="webroot/WEB-INF/lib"/>
+		<mkdir dir="webroot/WEB-INF/lib"/>
+	</target>
+
+	<!-- compilerarg value="-Xlint:unchecked" 这句的作用相当于javac -Xlint:unchecked,在编译的时候查看哪些类写了不安全的代码 -->
+	<!-- deprecation="on" 这句的作用是在编译的时候查看哪些类引用了过时的api -->
+	<target name="compile">
+		<javac srcdir="src" encoding="${encoding}" destdir="webroot/WEB-INF/classes" deprecation="on" includeAntRuntime="false" 
+           debug="on" optimize="off" source="1.8" target="1.8" memoryInitialSize="512m" memoryMaximumSize="512m" fork="true">
+			<compilerarg value="-Xlint:unchecked"/>
+			<classpath>
+				<fileset dir="lib">
+					<include name="*.jar" />
+				</fileset>
+			</classpath>
+		</javac>
+	</target>
+
+	<target name="deploy">
+		<antcall target="deploy.lib"/>
+		<antcall target="deploy.conf"/>
+	</target>
+
+	<target name="deploy.lib">
+		<copy todir="webroot/WEB-INF/lib" overwrite="true">
+			<fileset dir="lib">
+				<include name="*.jar" />
+			</fileset>
+		</copy>
+	</target>
+
+	<target name="deploy.conf">
+		<copy todir="webroot/WEB-INF/classes" overwrite="true">
+			<fileset dir="conf/classes"/>
+		</copy>
+	</target>
+
+	<!-- load init data -->
+	<target name="load" description="load test data into db">
+		<taskdef name="dbunit" classname="org.dbunit.ant.DbUnitTask" classpathref="dbunit.classpath">
+		</taskdef>
+		<dbunit driver="com.mysql.jdbc.Driver" url="jdbc:mysql://${mysql.dbServer}" userid="${mysql.user}" password="${mysql.passwd}">
+			<operation type="${dbunit.operation.type}" src="data/BuildingPosTemplate.xml" />			
+			<!--<operation type="DELETE" src="bin/data/deleteData.xml" />-->
+		</dbunit>
+	</target>
+
+	<!-- load init special 仅安装新服建立数据库时需要导入 -->
+	<target name="special" description="load test data into db">
+		<taskdef name="dbunit" classname="org.dbunit.ant.DbUnitTask" classpathref="dbunit.classpath">
+		</taskdef>
+		<dbunit driver="com.mysql.jdbc.Driver" url="jdbc:mysql://${mysql.dbServer}" userid="${mysql.user}" password="${mysql.passwd}">
+			<operation type="REFRESH" src="bin/data/special.xml" />
+		</dbunit>
+	</target>
+
+	<!-- release -->
+	<target name="release">
+		<antcall target="release.clean" />
+		<antcall target="release.deploy" />
+		<antcall target="release.data" />
+	</target>
+
+	<target name="release.clean">
+		<delete dir="${release.root}" />
+		<mkdir dir="${release.root}" />
+	</target>
+
+	<target name="release.data">
+		<copy todir="${release.root}" overwrite="true">
+			<fileset dir=".">
+				<include name="bin/data/*.xml" />
+				<include name="bin/sql/*.sql" />
+				<include name="bin/sql/*.properties" />
+				<include name="bin/sql/deleteUser/*.*" />
+				<include name="bin/sql/heFu/*.*" />
+				<include name="lib/mysql-connector-java-5.1.39-bin.jar" />
+				<include name="lib/log4j-1.2.14.jar" />
+				<include name="version/dbunit-2.1.jar"/>
+				<include name="build.xml" />
+			</fileset>
+		</copy>
+	</target>
+
+	<target name="release.deploy">
+		<copy todir="${release.root}" overwrite="true">
+			<fileset dir="webroot">
+				<exclude name="**/*.fla" />
+			</fileset>
+		</copy>
+	</target>
+
+	<target name="zipData">
+		<zip destfile="${flash_data_path}" update="true">
+			<fileset dir="bin/data" includes="*.xml">
+
+			</fileset>
+		</zip>
+	</target>
+
+	<target name="package">
+		<!--
+		<jar jarfile="dist/dynasty-core.jar" update="yes">
+			<fileset dir="webroot/WEB-INF/classes">
+				<include name="com/manu/**"/>
+			</fileset>
+		</jar>
+		-->
+		<jar jarfile="dist/dynasty_job.jar" update="yes">
+			<fileset dir="webroot/WEB-INF/classes">
+				<include name="com/manu/dynasty/jobFrame/**"/>
+			</fileset>
+		</jar>
+	</target>
+</project>

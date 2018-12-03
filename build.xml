@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- WARNING: Eclipse auto-generated file.
+              Any modifications will be overwritten.
+              To include a user specific buildfile here, simply create one in the same
+              directory with the processing instruction <?eclipse.ant.import?>
+              as the first entry and export the buildfile again. --><project basedir="." default="build" name="server_robot">
+    <property environment="env"/>
+    <property name="ECLIPSE_HOME" value="E:/eclipse-mars64/"/>
+    <property name="debuglevel" value="source,lines,vars"/>
+    <property name="target" value="1.8"/>
+    <property name="source" value="1.8"/>
+    <path id="Maven Dependencies.libraryclasspath">
+        <pathelement location="C:/Users/Administrator/.m2/repository/io/netty/netty-all/4.1.22.Final/netty-all-4.1.22.Final.jar"/>
+        <pathelement location="C:/Users/Administrator/.m2/repository/com/alibaba/fastjson/1.2.47/fastjson-1.2.47.jar"/>
+        <pathelement location="C:/Users/Administrator/.m2/repository/redis/clients/jedis/2.9.0/jedis-2.9.0.jar"/>
+        <pathelement location="C:/Users/Administrator/.m2/repository/org/apache/commons/commons-pool2/2.4.2/commons-pool2-2.4.2.jar"/>
+        <pathelement location="C:/Users/Administrator/.m2/repository/org/xerial/snappy/snappy-java/1.1.2.4/snappy-java-1.1.2.4.jar"/>
+        <pathelement location="C:/Users/Administrator/.m2/repository/org/slf4j/slf4j-api/1.7.25/slf4j-api-1.7.25.jar"/>
+        <pathelement location="C:/Users/Administrator/.m2/repository/org/apache/commons/commons-lang3/3.7/commons-lang3-3.7.jar"/>
+        <pathelement location="C:/Users/Administrator/.m2/repository/org/apache/directory/studio/org.apache.commons.codec/1.8/org.apache.commons.codec-1.8.jar"/>
+        <pathelement location="C:/Users/Administrator/.m2/repository/commons-codec/commons-codec/1.8/commons-codec-1.8.jar"/>
+        <pathelement location="C:/Users/Administrator/.m2/repository/org/asynchttpclient/async-http-client/2.0.32/async-http-client-2.0.32.jar"/>
+        <pathelement location="C:/Users/Administrator/.m2/repository/org/asynchttpclient/async-http-client-netty-utils/2.0.32/async-http-client-netty-utils-2.0.32.jar"/>
+        <pathelement location="C:/Users/Administrator/.m2/repository/io/netty/netty-buffer/4.0.46.Final/netty-buffer-4.0.46.Final.jar"/>
+        <pathelement location="C:/Users/Administrator/.m2/repository/io/netty/netty-codec-http/4.0.46.Final/netty-codec-http-4.0.46.Final.jar"/>
+        <pathelement location="C:/Users/Administrator/.m2/repository/io/netty/netty-codec/4.0.46.Final/netty-codec-4.0.46.Final.jar"/>
+        <pathelement location="C:/Users/Administrator/.m2/repository/io/netty/netty-handler/4.0.46.Final/netty-handler-4.0.46.Final.jar"/>
+        <pathelement location="C:/Users/Administrator/.m2/repository/io/netty/netty-transport/4.0.46.Final/netty-transport-4.0.46.Final.jar"/>
+        <pathelement location="C:/Users/Administrator/.m2/repository/io/netty/netty-transport-native-epoll/4.0.46.Final/netty-transport-native-epoll-4.0.46.Final-linux-x86_64.jar"/>
+        <pathelement location="C:/Users/Administrator/.m2/repository/io/netty/netty-common/4.0.46.Final/netty-common-4.0.46.Final.jar"/>
+        <pathelement location="C:/Users/Administrator/.m2/repository/org/asynchttpclient/netty-resolver-dns/2.0.32/netty-resolver-dns-2.0.32.jar"/>
+        <pathelement location="C:/Users/Administrator/.m2/repository/org/asynchttpclient/netty-resolver/2.0.32/netty-resolver-2.0.32.jar"/>
+        <pathelement location="C:/Users/Administrator/.m2/repository/org/asynchttpclient/netty-codec-dns/2.0.32/netty-codec-dns-2.0.32.jar"/>
+        <pathelement location="C:/Users/Administrator/.m2/repository/org/reactivestreams/reactive-streams/1.0.0/reactive-streams-1.0.0.jar"/>
+        <pathelement location="C:/Users/Administrator/.m2/repository/com/typesafe/netty/netty-reactive-streams/1.0.8/netty-reactive-streams-1.0.8.jar"/>
+        <pathelement location="C:/Users/Administrator/.m2/repository/org/quartz-scheduler/quartz/2.3.0/quartz-2.3.0.jar"/>
+        <pathelement location="C:/Users/Administrator/.m2/repository/com/mchange/c3p0/0.9.5.2/c3p0-0.9.5.2.jar"/>
+        <pathelement location="C:/Users/Administrator/.m2/repository/com/mchange/mchange-commons-java/0.2.11/mchange-commons-java-0.2.11.jar"/>
+        <pathelement location="C:/Users/Administrator/.m2/repository/com/zaxxer/HikariCP-java6/2.3.13/HikariCP-java6-2.3.13.jar"/>
+    </path>
+    <path id="server_robot.classpath">
+        <pathelement location="target/classes"/>
+        <path refid="Maven Dependencies.libraryclasspath"/>
+        <pathelement location="lib/jackson-all-1.6.1.jar"/>
+        <pathelement location="lib/logback-classic-1.1.6.jar"/>
+        <pathelement location="lib/logback-core-1.1.6.jar"/>
+        <pathelement location="lib/slf4j-api-1.7.19.jar"/>
+        <pathelement location="lib/mysql-connector-java-5.1.6-bin.jar"/>
+        <pathelement location="lib/commons-dbcp.jar"/>
+        <pathelement location="lib/commons-pool.jar"/>
+        <pathelement location="lib/c3p0-0.9.5.2.jar"/>
+        <pathelement location="lib/dbunit-2.1.jar"/>
+    </path>
+    <path id="run.RobotStart (2).classpath">
+        <path refid="server_robot.classpath"/>
+        <path refid="Maven Dependencies.libraryclasspath"/>
+    </path>
+    <target name="init">
+        <mkdir dir="target/classes"/>
+        <copy includeemptydirs="false" todir="target/classes">
+            <fileset dir="src">
+                <exclude name="**/*.launch"/>
+                <exclude name="**/*.java"/>
+            </fileset>
+        </copy>
+    </target>
+    <target name="clean">
+        <delete dir="target/classes"/>
+    </target>
+    <target depends="clean" name="cleanall"/>
+    <target depends="build-subprojects,build-project" name="build"/>
+    <target name="build-subprojects"/>
+    <target depends="init" name="build-project">
+        <echo message="${ant.project.name}: ${ant.file}"/>
+        <javac debug="true" debuglevel="${debuglevel}" destdir="target/classes" includeantruntime="false" source="${source}" target="${target}">
+            <src path="src"/>
+            <classpath refid="server_robot.classpath"/>
+        </javac>
+    </target>
+    <target description="Build all projects which reference this project. Useful to propagate changes." name="build-refprojects"/>
+    <target description="copy Eclipse compiler jars to ant lib directory" name="init-eclipse-compiler">
+        <copy todir="${ant.library.dir}">
+            <fileset dir="${ECLIPSE_HOME}/plugins" includes="org.eclipse.jdt.core_*.jar"/>
+        </copy>
+        <unzip dest="${ant.library.dir}">
+            <patternset includes="jdtCompilerAdapter.jar"/>
+            <fileset dir="${ECLIPSE_HOME}/plugins" includes="org.eclipse.jdt.core_*.jar"/>
+        </unzip>
+    </target>
+    <target description="compile project with Eclipse compiler" name="build-eclipse-compiler">
+        <property name="build.compiler" value="org.eclipse.jdt.core.JDTCompilerAdapter"/>
+        <antcall target="build"/>
+    </target>
+    <target name="RobotStart (2)">
+        <java classname="com.playcrab.RobotStart" failonerror="true" fork="yes">
+            <classpath refid="run.RobotStart (2).classpath"/>
+        </java>
+    </target>
+</project>

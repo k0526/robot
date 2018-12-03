@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<configuration scan="true" scanPeriod="60" debug="false">
+
+	<!--定义日志文件的存储地址 勿在 LogBack 的配置中使用相对路径 -->
+	<property name="log.home" value="D:/workspaceH5/server_robot" />
+	
+	<!-- 下面是关闭一些包 里面打印出来的日志的配置 -->
+	<!-- 控制quartz的日志输出 -->
+	<logger name="org.quartz" level="ERROR" />
+
+	<logger name="org.asynchttpclient" level="ERROR" />
+
+	<logger name="org.slf4j" level="ERROR" />
+
+	<logger name="io.netty" level="ERROR" />
+	
+	<logger name="com.mchange"  level ="ERROR" />
+
+	<appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+		<encoder>
+			<pattern>%d{HH:mm:ss} %-5level [%thread][%file:%line] : %msg%n
+			</pattern>
+		</encoder>
+	</appender>
+
+	<appender name="CONSOLE"
+		class="ch.qos.logback.core.rolling.RollingFileAppender">
+		<file>${log.home}/console.log</file>
+
+		<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+			<fileNamePattern>${log.home}/console.%d{yyyy-MM-dd}.log
+			</fileNamePattern>
+			<maxHistory>7</maxHistory>
+		</rollingPolicy>
+
+		<encoder>
+			<pattern>%d{HH:mm:ss} %-5level [%thread][%file:%line] : %msg%n
+			</pattern>
+		</encoder>
+	</appender>
+
+	<appender name="ERROR"
+		class="ch.qos.logback.core.rolling.RollingFileAppender">
+		<file>${log.home}/error.log</file>
+
+		<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+			<fileNamePattern>${log.home}/error.%d{yyyy-MM-dd}.log
+			</fileNamePattern>
+			<maxHistory>7</maxHistory>
+		</rollingPolicy>
+
+		<encoder>
+			<pattern>%d{HH:mm:ss} %-5level [%thread][%file:%line] : %msg%n
+			</pattern>
+		</encoder>
+
+		<filter class="ch.qos.logback.classic.filter.ThresholdFilter">
+			<level>ERROR</level>
+		</filter>
+	</appender>
+
+	<appender name="ROBOTSTATUS"
+		class="ch.qos.logback.core.rolling.RollingFileAppender">
+		<file>./logs/robotstatus.log</file>
+		<encoder>
+			<pattern>%d{HH:mm:ss} %-5level [%thread][%file:%line] : %msg%n
+			</pattern>
+		</encoder>
+		<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+			<fileNamePattern>${log.home}/robotstatus.%d{yyyy-MM-dd}.log
+			</fileNamePattern>
+			<maxHistory>7</maxHistory>
+		</rollingPolicy>
+	</appender>
+	
+	<!-- 下面是把日志写入数据库的方法   -->
+	<appender name="db-classic-mysql-pool" class="ch.qos.logback.classic.db.DBAppender">
+		<connectionSource class="ch.qos.logback.core.db.DataSourceConnectionSource">
+			<dataSource class="org.apache.commons.dbcp.BasicDataSource">
+				<driverClassName>com.mysql.jdbc.Driver</driverClassName>
+				<url>jdbc:mysql://192.168.3.89:3306/tumorpredict</url>
+				<username>devuser</username>
+				<password>devuser</password>
+			</dataSource>
+		</connectionSource>
+	</appender>
+
+	<root name="com.playcrab" level="DEBUG">
+		<appender-ref ref="STDOUT" />
+		<appender-ref ref="CONSOLE" />
+		<appender-ref ref="ERROR" />
+	</root>
+
+	<logger name="robotStatus" level="DEBUG" additivity="false">
+		<appender-ref ref="ROBOTSTATUS" />
+		<appender-ref ref="CONSOLE" />
+		<appender-ref ref="STDOUT" />
+		<appender-ref ref="db-classic-mysql-pool" />
+	</logger>
+
+</configuration>
